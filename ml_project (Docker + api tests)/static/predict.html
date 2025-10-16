@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict Test Score</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container" id="predict">
+        <h2>Predict Your Test Score</h2>
+        <form action="/predict" method="post" id="predict-form">
+            <label for="hours_studied">Hours Studied:</label>
+            <input type="number" id="hours_studied" name="hours_studied" required placeholder="Enter hours studied" min="0">
+            <button type="submit">Get Prediction</button>
+        </form>
+        <div id="result" class="result"></div>
+        <footer>
+            <p>&copy; 2024 Meta Brains. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <script>
+        document.getElementById("predict-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const hoursStudied = document.getElementById("hours_studied").value;
+            fetch("/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ hours_studied: parseFloat(hoursStudied) })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = `Predicted Test Score: ${data.predicted_test_score}`;
+            })
+            .catch(error => {
+                document.getElementById("result").innerText = "Error in prediction. Please try again later.";
+            });
+        });
+    </script>
+</body>
+</html>
