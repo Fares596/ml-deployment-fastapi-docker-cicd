@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iris Prediction</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script>
+        // JavaScript function to handle the form submission
+        async function submitForm(event) {
+            event.preventDefault();  // Prevent the default form submission
+
+            // Get the form data
+            const formData = new FormData(event.target);
+
+            // Prepare the data to send to the FastAPI endpoint
+            const data = new URLSearchParams();
+            for (const [key, value] of formData.entries()) {
+                data.append(key, value);
+            }
+
+            // Send the data to FastAPI via POST request
+            const response = await fetch("/predict", {
+                method: "POST",
+                body: data
+            });
+
+            // Get the JSON response and update the result on the page
+            const result = await response.json();
+            document.getElementById("prediction").innerText = "Predicted Species: " + result.prediction;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Predict Iris Species</h1>
+        <form onsubmit="submitForm(event)">
+            <label for="sepal_length">Sepal Length (cm):</label>
+            <input type="number" step="0.1" name="sepal_length" id="sepal_length" required>
+
+            <label for="sepal_width">Sepal Width (cm):</label>
+            <input type="number" step="0.1" name="sepal_width" id="sepal_width" required>
+
+            <label for="petal_length">Petal Length (cm):</label>
+            <input type="number" step="0.1" name="petal_length" id="petal_length" required>
+
+            <label for="petal_width">Petal Width (cm):</label>
+            <input type="number" step="0.1" name="petal_width" id="petal_width" required>
+
+            <button type="submit" class="button">Predict</button>
+        </form>
+
+        <!-- Display prediction result here -->
+        <div id="prediction"></div>
+    </div>
+</body>
+</html>
