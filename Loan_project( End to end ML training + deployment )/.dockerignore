@@ -1,0 +1,11 @@
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+*.pyo
+myenv/
+*.ipynb
+.DS_Store
+Thumbs.db
+.git/
+.gitignore
+
